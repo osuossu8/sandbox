@@ -1,3 +1,7 @@
+# refs
+# - https://docs.github.com/ja/actions/learn-github-actions/understanding-github-actions
+# - https://docs.github.com/ja/actions/automating-builds-and-tests/building-and-testing-python
+# - https://github.com/actions/setup-python/tree/main
 name: learn-github-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
 # on: [push] # push event
