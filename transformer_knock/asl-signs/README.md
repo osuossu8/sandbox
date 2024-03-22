@@ -2,6 +2,13 @@
 
 https://www.kaggle.com/competitions/asl-signs
 
+## setup env
+
+```bash
+poetry lock
+poetry install
+```
+
 ## prepare data
 
 ```bash
