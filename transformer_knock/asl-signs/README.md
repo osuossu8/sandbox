@@ -14,3 +14,10 @@ poetry install
 ```bash
 kaggle competitions download -c asl-signs
 ```
+
+## lint and format
+
+```bash
+ruff format .
+ruff check . --fix
+```
