@@ -27,7 +27,7 @@ class Conv1dNet(LightningModule):
             nn.ReLU(),
         )
         self.conv1 = nn.Conv1d(128, cfg.num_classes, 1)
-        self.linear = nn.Linear(64, 1)
+        self.linear = nn.Linear(cfg.max_length, 1)
         self.criterion = nn.CrossEntropyLoss()
         self.preds: list[int] = []
         self.gts: list[int] = []

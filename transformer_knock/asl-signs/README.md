@@ -28,3 +28,10 @@ ruff format .
 ruff check . --fix
 mypy .
 ```
+
+## watch performance
+
+```bash
+watch free -h
+watch nvidia-smi
+```
