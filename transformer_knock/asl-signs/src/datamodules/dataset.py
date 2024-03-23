@@ -5,6 +5,7 @@ import torch
 from lightning import LightningModule
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader, Dataset
+from tqdm.auto import tqdm
 
 ROWS_PER_FRAME = 543
 
@@ -17,20 +18,27 @@ def load_relevant_data_subset(pq_path: str) -> npt.NDArray[np.float32]:
     return data.astype(np.float32)
 
 
+def load_data_to_memory(pq_paths: list[str]) -> list[npt.NDArray[np.float32]]:
+    data = []
+    for pq_path in tqdm(pq_paths):
+        data.append(load_relevant_data_subset(pq_path))
+    return data
+
+
 class GISLDataset(Dataset):  # type: ignore
     def __init__(self, df: pd.DataFrame, cfg: DictConfig) -> None:
         self.df = df
-        self.paths = df["path"].to_numpy()
+        self.paths = df["path"].to_numpy().tolist()
         self.labels = df["label"].to_numpy()
         self.max_length = cfg.max_length
         self.num_point = cfg.num_point
+        self.xyz = load_data_to_memory(self.paths)
 
     def __len__(self) -> int:
         return len(self.df)
 
     def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
-        pq_path = self.paths[idx]
-        xyz = load_relevant_data_subset(pq_path)
+        xyz = self.xyz[idx]
         xyz = torch.from_numpy(xyz)
 
         # normalize

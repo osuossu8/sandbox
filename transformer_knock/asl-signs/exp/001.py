@@ -8,7 +8,7 @@ from typing import cast
 import pandas as pd
 from lightning import Trainer, seed_everything
 from lightning.pytorch.callbacks import LearningRateMonitor, ModelCheckpoint
-from lightning.pytorch.loggers import TensorBoardLogger
+from lightning.pytorch.loggers import CSVLogger # TensorBoardLogger
 from omegaconf import DictConfig, OmegaConf
 
 from src.create_kfold import DataSplitter
@@ -47,6 +47,7 @@ metric_checkpoint = ModelCheckpoint(**config.checkpoint)
 
 logging_path = root_dir / "logs" / "001"
 logging_path.mkdir(parents=True, exist_ok=True)
-tensorboard_logger = TensorBoardLogger(logging_path, name=None)
-trainer = Trainer(logger=tensorboard_logger, callbacks=[lr_monitor, metric_checkpoint], **config.trainer)
+#tensorboard_logger = TensorBoardLogger(logging_path, name=None)
+csv_logger = CSVLogger(logging_path)
+trainer = Trainer(logger=csv_logger, callbacks=[lr_monitor, metric_checkpoint], **config.trainer)
 trainer.fit(model, datamodule=datamodule)
