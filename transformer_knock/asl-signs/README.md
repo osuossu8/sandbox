@@ -15,6 +15,12 @@ poetry install
 kaggle competitions download -c asl-signs
 ```
 
+## run train
+
+```bash
+poetry run python exp/001.py
+```
+
 ## lint and format
 
 ```bash

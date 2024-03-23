@@ -1,0 +1,49 @@
+seed: 42
+epoch: &epoch 2
+
+num_point: 82
+max_length: 64
+feature_dim: 246 # num_point * 3
+num_classes: 250
+
+train_loader:
+  batch_size: 512 #256
+  shuffle: True
+  num_workers: 4
+  pin_memory: True
+  drop_last: True
+
+val_loader:
+  batch_size: 512 #256
+  shuffle: False
+  num_workers: 4
+  pin_memory: True
+  drop_last: False
+
+optimizer:
+  name: AdamW
+  params:
+    lr: 5e-4
+
+scheduler:
+  name: CosineAnnealingWarmRestarts
+  params:
+    eta_min: 1e-6
+    T_0: *epoch
+
+trainer:
+  deterministic: True
+  devices: 1
+  accelerator: gpu
+  precision: 16-mixed
+  accumulate_grad_batches: 1
+  max_epochs: *epoch
+  fast_dev_run: False
+  num_sanity_val_steps: 2
+
+checkpoint:
+  filename: best
+  monitor: val_acc
+  save_top_k: 1
+  mode: max
+  save_last: True
