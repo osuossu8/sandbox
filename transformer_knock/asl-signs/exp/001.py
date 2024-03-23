@@ -14,6 +14,7 @@ from omegaconf import DictConfig, OmegaConf
 from src.create_kfold import DataSplitter
 from src.datamodules.dataset import GISLDataModule
 from src.models.conv1dnet import Conv1dNet
+from src.models.modelmodule import ModelModule
 
 datasplitter = DataSplitter(
     target_col="label",
@@ -40,7 +41,7 @@ config = cast(DictConfig, OmegaConf.load(config_path))
 seed_everything(config.seed)
 
 datamodule = GISLDataModule(train_df, val_df, config)
-model = Conv1dNet(config)
+model = ModelModule(Conv1dNet, config)
 
 lr_monitor = LearningRateMonitor()
 metric_checkpoint = ModelCheckpoint(**config.checkpoint)

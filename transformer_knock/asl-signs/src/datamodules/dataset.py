@@ -25,7 +25,7 @@ def load_data_to_memory(pq_paths: list[str]) -> list[torch.Tensor]:
         xyz = torch.from_numpy(xyz)
         # normalize
         xyz = xyz - xyz[~torch.isnan(xyz)].mean(0, keepdim=True)
-        xyz = xyz / xyz[~torch.isnan(xyz)].std(0, keepdim=True)        
+        xyz = xyz / xyz[~torch.isnan(xyz)].std(0, keepdim=True)
         data.append(xyz)
     return data
 
@@ -44,10 +44,10 @@ class GISLDataset(Dataset):  # type: ignore
 
     def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
         xyz = self.xyz[idx]
-        #xyz = torch.from_numpy(xyz)
+        # xyz = torch.from_numpy(xyz)
         # normalize
-        #xyz = xyz - xyz[~torch.isnan(xyz)].mean(0, keepdim=True)
-        #xyz = xyz / xyz[~torch.isnan(xyz)].std(0, keepdim=True)
+        # xyz = xyz - xyz[~torch.isnan(xyz)].mean(0, keepdim=True)
+        # xyz = xyz / xyz[~torch.isnan(xyz)].std(0, keepdim=True)
 
         LIP = [
             61,
