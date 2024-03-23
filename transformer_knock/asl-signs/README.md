@@ -26,4 +26,5 @@ poetry run python exp/001.py
 ```bash
 ruff format .
 ruff check . --fix
+mypy .
 ```
