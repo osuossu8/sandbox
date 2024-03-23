@@ -18,10 +18,15 @@ def load_relevant_data_subset(pq_path: str) -> npt.NDArray[np.float32]:
     return data.astype(np.float32)
 
 
-def load_data_to_memory(pq_paths: list[str]) -> list[npt.NDArray[np.float32]]:
+def load_data_to_memory(pq_paths: list[str]) -> list[torch.Tensor]:
     data = []
     for pq_path in tqdm(pq_paths):
-        data.append(load_relevant_data_subset(pq_path))
+        xyz = load_relevant_data_subset(pq_path)
+        xyz = torch.from_numpy(xyz)
+        # normalize
+        xyz = xyz - xyz[~torch.isnan(xyz)].mean(0, keepdim=True)
+        xyz = xyz / xyz[~torch.isnan(xyz)].std(0, keepdim=True)        
+        data.append(xyz)
     return data
 
 
@@ -39,11 +44,10 @@ class GISLDataset(Dataset):  # type: ignore
 
     def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
         xyz = self.xyz[idx]
-        xyz = torch.from_numpy(xyz)
-
+        #xyz = torch.from_numpy(xyz)
         # normalize
-        xyz = xyz - xyz[~torch.isnan(xyz)].mean(0, keepdim=True)
-        xyz = xyz / xyz[~torch.isnan(xyz)].std(0, keepdim=True)
+        #xyz = xyz - xyz[~torch.isnan(xyz)].mean(0, keepdim=True)
+        #xyz = xyz / xyz[~torch.isnan(xyz)].std(0, keepdim=True)
 
         LIP = [
             61,
