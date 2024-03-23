@@ -13,7 +13,7 @@ class Batch(TypedDict):
     label: Tensor
 
 
-class ModelModule(LightningModule):
+class GISLModelModule(LightningModule):
     def __init__(
         self,
         model: nn.Module,

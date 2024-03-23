@@ -2,7 +2,7 @@ seed: 42
 epoch: &epoch 5
 
 num_point: 82
-max_length: 90 # 64
+max_length: 64
 feature_dim: 246 # num_point * 3
 num_classes: 250
 
