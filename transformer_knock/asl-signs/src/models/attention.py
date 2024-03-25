@@ -27,6 +27,7 @@ class SimpleAttentionNet(nn.Module):
     def forward(
         self,
         x: Tensor,  # (batch_size, time, emb)
+        attention_mask: Tensor | None,  # (batch_size, time)
     ) -> Tensor:
         # input = memory -> self-attention
         input_x = x
@@ -35,10 +36,17 @@ class SimpleAttentionNet(nn.Module):
         q = self.query_linear(input_x)  # (batch_size, time, depth)
         k = self.key_linear(memory_x)  # (batch_size, time, depth)
         v = self.value_linear(memory_x)  # (batch_size, time, depth)
-
         # dot product
         # https://qiita.com/tand826/items/9e1b6a4de785097fe6a5
+        if self.cfg.is_scaled_dot_product:
+            q = q / (self.depth**0.5)
         logit = torch.bmm(q, k.transpose(1, 2))
+
+        if attention_mask is not None:
+            # softmax する時に -inf が 0 になる
+            attention_mask = attention_mask.data.masked_fill_(attention_mask, -torch.finfo(torch.float).max)
+
+            logit += attention_mask
 
         # normalization
         attention_weight = torch.nn.functional.softmax(logit, dim=2)

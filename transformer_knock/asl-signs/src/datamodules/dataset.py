@@ -106,13 +106,20 @@ class GISLDataset(Dataset):  # type: ignore
         # (len_seq, num_point, 3) -> (len_seq, num_point * 3) # time, emb
         xyz = xyz.reshape(len_seq, self.num_point * 3)
 
+        mask = torch.zeros((self.max_length, self.max_length))
+        mask[:len_seq] = 1
+
         if len_seq <= self.max_length:
             padded = torch.zeros((self.max_length, self.num_point * 3))
             padded[:len_seq] = xyz
             xyz = padded
         else:
             xyz = xyz[: self.max_length]
-        return {"image": xyz.to(torch.float32), "label": torch.tensor(self.labels[idx]).type(torch.LongTensor)}
+        return {
+            "image": xyz.to(torch.float32),
+            "mask": mask.to(torch.bool),
+            "label": torch.tensor(self.labels[idx]).type(torch.LongTensor),
+        }
 
 
 class GISLDataModule(LightningModule):

@@ -10,6 +10,7 @@ from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts, LRScheduler
 
 class Batch(TypedDict):
     image: Tensor
+    mask: Tensor
     label: Tensor
 
 
@@ -30,13 +31,15 @@ class GISLModelModule(LightningModule):
     def forward(
         self,
         x: Tensor,
+        attention_mask: Tensor | None,
     ) -> Tensor:
-        return self.model(x)
+        return self.model(x, attention_mask)
 
     def _share_step(self, batch: Batch) -> tuple[Tensor, Tensor, Tensor]:
-        images, labels = batch["image"], batch["label"]
+        images, masks, labels = batch["image"], batch["mask"], batch["label"]
         images = images.float()
-        logits = self.forward(images)
+        masks = masks.bool()
+        logits = self.forward(images, masks)
         loss = self.criterion(logits, labels)
         return loss, logits, labels
 
