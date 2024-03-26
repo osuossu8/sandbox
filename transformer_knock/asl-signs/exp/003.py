@@ -13,7 +13,7 @@ from omegaconf import DictConfig, OmegaConf
 
 from src.create_kfold import DataSplitter
 from src.datamodules.dataset import GISLDataModule
-from src.models.attention import SimpleAttentionNet
+from src.models.attention import SimpleMultiHeadAttentionNet
 from src.models.modelmodule import GISLModelModule
 
 
@@ -43,7 +43,7 @@ def main(exp_id: str) -> None:
     seed_everything(config.seed)
 
     datamodule = GISLDataModule(train_df, val_df, config)
-    model = GISLModelModule(SimpleAttentionNet, config)
+    model = GISLModelModule(SimpleMultiHeadAttentionNet, config)
 
     lr_monitor = LearningRateMonitor()
     metric_checkpoint = ModelCheckpoint(**config.checkpoint)
@@ -56,5 +56,5 @@ def main(exp_id: str) -> None:
 
 
 if __name__ == "__main__":
-    exp_id = "002"
+    exp_id = "003"
     main(exp_id)
