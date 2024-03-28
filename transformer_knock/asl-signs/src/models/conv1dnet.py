@@ -22,6 +22,7 @@ class Conv1dNet(nn.Module):
     def forward(
         self,
         x: Tensor,
+        attention_mask: Tensor | None,
     ) -> Tensor:
         x = x.transpose(1, 2)  # (batch_size, n_timesteps, n_channels)
         x = self.conv0(x)

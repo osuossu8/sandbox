@@ -6,6 +6,8 @@ max_length: 64
 feature_dim: 246 # num_point * 3
 num_classes: 250
 
+is_scaled_dot_product: True
+
 train_loader:
   batch_size: 512 #256
   shuffle: True
