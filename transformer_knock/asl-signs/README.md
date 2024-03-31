@@ -18,7 +18,7 @@ kaggle competitions download -c asl-signs
 ## run train
 
 ```bash
-poetry run python exp/run.py 004 --debug True
+poetry run python exp/run.py 004 --epoch 30 --debug False
 ```
 
 ```bash
@@ -27,7 +27,7 @@ do
     echo " "
     echo "start exp ${exp_id}"
     echo " "
-    poetry run python exp/run.py ${exp_id} --debug True
+    poetry run python exp/run.py ${exp_id} --epoch 30 --debug False
 done
 ```
 

@@ -2,11 +2,11 @@ import sys
 
 sys.path.append("/root/sandbox/transformer_knock/asl-signs/")
 import json
-import hydra
-import click
 from pathlib import Path
 from typing import cast
 
+import click
+import hydra
 import pandas as pd
 from lightning import Trainer, seed_everything
 from lightning.pytorch.callbacks import LearningRateMonitor, ModelCheckpoint
@@ -20,8 +20,9 @@ from src.models.modelmodule import GISLModelModule
 
 @click.command()
 @click.argument("exp-id", type=str)
+@click.option("--epoch", type=int, default=-1, help="Epoch")
 @click.option("--debug", type=bool, default=False, help="Debug mode")
-def main(exp_id: str, debug: bool) -> None:
+def main(exp_id: str, epoch: int, debug: bool) -> None:
     datasplitter = DataSplitter(
         target_col="label",
         group_col="participant_id",
@@ -43,12 +44,17 @@ def main(exp_id: str, debug: bool) -> None:
     val_df = df[df["kfold"] == 0].reset_index(drop=True)
 
     if debug:
-        train_df = train_df.head(100)
-        val_df = val_df.head(100)
+        train_df = train_df.head(1000)
+        val_df = val_df.head(1000)
 
     config_path = root_dir / "config" / f"{exp_id}.yaml"
     config = cast(DictConfig, OmegaConf.load(config_path))
     seed_everything(config.seed)
+
+    if epoch > 0:
+        config.epoch = epoch
+        config.scheduler.params.T_0 = epoch
+        config.trainer.max_epochs = epoch
 
     datamodule = GISLDataModule(train_df, val_df, config)
     model_defintion = hydra.utils.get_class(config.model.definition)

@@ -5,18 +5,15 @@ from torch import Tensor, nn
 
 
 def positional_encoding(length, embed_dim):
-    dim = embed_dim//2
+    dim = embed_dim // 2
 
-    position = np.arange(length)[:, np.newaxis]     # (seq, 1)
-    dim = np.arange(dim)[np.newaxis, :]/dim   # (1, dim)
+    position = np.arange(length)[:, np.newaxis]  # (seq, 1)
+    dim = np.arange(dim)[np.newaxis, :] / dim  # (1, dim)
 
-    angle = 1 / (10000**dim)         # (1, dim)
-    angle = position * angle    # (pos, dim)
+    angle = 1 / (10000**dim)  # (1, dim)
+    angle = position * angle  # (pos, dim)
 
-    pos_embed = np.concatenate(
-        [np.sin(angle), np.cos(angle)],
-        axis=-1
-    )
+    pos_embed = np.concatenate([np.sin(angle), np.cos(angle)], axis=-1)
     pos_embed = torch.from_numpy(pos_embed).float()
     return pos_embed
 
@@ -386,7 +383,8 @@ class ScaledDotProductAttentionFromZenn(nn.Module):
             if mask.dim() != attention_weight.dim():
                 raise ValueError(
                     "mask.dim != attention_weight.dim, mask.dim={}, attention_weight.dim={}".format(
-                        mask.dim(), attention_weight.dim(),
+                        mask.dim(),
+                        attention_weight.dim(),
                     ),
                 )
             attention_weight = attention_weight.data.masked_fill_(mask, -torch.finfo(torch.float16).max)
