@@ -561,6 +561,20 @@ files = [
 ]
 
 [[package]]
+name = "click"
+version = "8.1.7"
+description = "Composable command line interface toolkit"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "click-8.1.7-py3-none-any.whl", hash = "sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28"},
+    {file = "click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de"},
+]
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[[package]]
 name = "cmake"
 version = "3.28.4"
 description = "CMake is an open-source, cross-platform family of tools designed to build, test and package software"
@@ -4394,4 +4408,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "0c1cf63e793bbdbd34f4a7c73a968364f5deefc96e6e57040ea8cc2c24500b64"
+content-hash = "299595f72c7cc4f615986779b1c943737b5eff8bd328bac18da266944edbc0cf"

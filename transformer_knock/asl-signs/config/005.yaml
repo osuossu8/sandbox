@@ -1,7 +1,7 @@
 seed: 42
 epoch: &epoch 5
 model:
-  definition: src.models.attention.SimpleMultiHeadAttentionNet
+  definition: src.models.attention.SimpleMultiHeadAttentionNetWithPositionalEmbedding
 
 num_point: 82
 max_length: 64

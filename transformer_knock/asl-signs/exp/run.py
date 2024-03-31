@@ -2,6 +2,8 @@ import sys
 
 sys.path.append("/root/sandbox/transformer_knock/asl-signs/")
 import json
+import hydra
+import click
 from pathlib import Path
 from typing import cast
 
@@ -13,11 +15,13 @@ from omegaconf import DictConfig, OmegaConf
 
 from src.create_kfold import DataSplitter
 from src.datamodules.dataset import GISLDataModule
-from src.models.conv1dnet import Conv1dNet
 from src.models.modelmodule import GISLModelModule
 
 
-def main(exp_id: str) -> None:
+@click.command()
+@click.argument("exp-id", type=str)
+@click.option("--debug", type=bool, default=False, help="Debug mode")
+def main(exp_id: str, debug: bool) -> None:
     datasplitter = DataSplitter(
         target_col="label",
         group_col="participant_id",
@@ -38,12 +42,17 @@ def main(exp_id: str) -> None:
     train_df = df[df["kfold"] != 0].reset_index(drop=True)
     val_df = df[df["kfold"] == 0].reset_index(drop=True)
 
+    if debug:
+        train_df = train_df.head(100)
+        val_df = val_df.head(100)
+
     config_path = root_dir / "config" / f"{exp_id}.yaml"
     config = cast(DictConfig, OmegaConf.load(config_path))
     seed_everything(config.seed)
 
     datamodule = GISLDataModule(train_df, val_df, config)
-    model = GISLModelModule(Conv1dNet, config)
+    model_defintion = hydra.utils.get_class(config.model.definition)
+    model = GISLModelModule(model_defintion, config)
 
     lr_monitor = LearningRateMonitor()
     metric_checkpoint = ModelCheckpoint(**config.checkpoint)
@@ -56,5 +65,4 @@ def main(exp_id: str) -> None:
 
 
 if __name__ == "__main__":
-    exp_id = "001"
-    main(exp_id)
+    main()

@@ -1,5 +1,7 @@
 seed: 42
 epoch: &epoch 5
+model:
+  definition: src.models.attention.SimpleAttentionNet
 
 num_point: 82
 max_length: 64
