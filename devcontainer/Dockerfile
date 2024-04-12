@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.7.1-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.7.1-cudnn8-devel-ubuntu20.04 as base
 
 ENV TZ Asia/Tokyo
 ENV DEBIAN_FRONTEND noninteractive
@@ -42,12 +42,16 @@ RUN ./configure --enable-optimizations && \
     update-alternatives --install /usr/bin/python python3 /usr/local/bin/python3.10 1 && \
     update-alternatives --install /usr/bin/pip pip3 /usr/local/bin/pip3.10 1
 
-# poetry install
-RUN mkdir -p /workspace
-# COPY poetry.lock pyproject.toml /workspace/
-WORKDIR /workspace
+# poetry setting
 RUN pip install -U poetry==1.6.1
 RUN poetry config virtualenvs.create false
-#RUN poetry lock
-#RUN poetry install
+
+# kaggle setting
 RUN pip install -U kaggle==1.5.16
+COPY ~/.kaggle/kaggle.json /root/.kaggle/kaggle.json
+RUN chmod 600 /root/.kaggle/kaggle.json
+
+FROM base as dev
+
+RUN mkdir -p /workspace
+WORKDIR /workspace
