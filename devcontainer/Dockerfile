@@ -48,7 +48,7 @@ RUN poetry config virtualenvs.create false
 
 # kaggle setting
 RUN pip install -U kaggle==1.5.16
-COPY ~/.kaggle/kaggle.json /root/.kaggle/kaggle.json
+COPY /.kaggle/kaggle.json /root/.kaggle/kaggle.json
 RUN chmod 600 /root/.kaggle/kaggle.json
 
 FROM base as dev
