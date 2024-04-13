@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append("/root/sandbox/transformer_knock/asl-signs/")
+sys.path.append("/workspace/sandbox/transformer_knock/asl-signs/")
 import json
 from pathlib import Path
 from typing import cast
@@ -28,7 +28,7 @@ def main(exp_id: str, epoch: int, debug: bool) -> None:
         group_col="participant_id",
     )
 
-    root_dir = Path("/root/sandbox/transformer_knock/asl-signs/")
+    root_dir = Path("/workspace/sandbox/transformer_knock/asl-signs/")
     data_dir = root_dir / "data"
     label_map_path = Path(data_dir / "sign_to_prediction_index_map.json")
 
