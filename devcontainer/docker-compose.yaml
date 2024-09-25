@@ -3,6 +3,7 @@ services:
   kaggle_container:
     container_name: 'gpu'
     hostname: 'gpu'
+    shm_size: '60g' # shared memory size
 
     build:
       context: ./
@@ -17,6 +18,9 @@ services:
       - type: bind
         source: /mnt500 # relative path to external ssd
         target: /external_disk
+      - type: bind
+        source: /mnt2tb # relative path to external ssd
+        target: /external_disk_2tb
     deploy:
       resources:
         reservations:
