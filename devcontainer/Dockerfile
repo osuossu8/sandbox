@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04 as base
+FROM nvidia/cuda:12.0.0-cudnn8-devel-ubuntu20.04 as base
 
 ENV TZ Asia/Tokyo
 ENV DEBIAN_FRONTEND noninteractive
