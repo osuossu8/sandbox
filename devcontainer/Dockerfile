@@ -53,7 +53,11 @@ RUN pip install -U kaggle==1.5.16
 COPY /.kaggle/kaggle.json /root/.kaggle/kaggle.json
 RUN chmod 600 /root/.kaggle/kaggle.json
 
-COPY /.bashrc /root/.bashrc
+RUN echo "export PS1='\[\e[36m\]kaeru\[\e[0m\] \[\e[32m\]env\[\e[0m\] \[\e[33m\]\w\[\e[0m\] $ '" >> /root/.bashrc
+RUN echo "export LANG='ja_JP.UTF-8'" >> /root/.bashrc
+RUN echo "alias vi='vim'" >> /root/.bashrc
+RUN echo "alias gb='git branch'" >> /root/.bashrc
+RUN echo "alias gst='git status'" >> /root/.bashrc
 RUN source /root/.bashrc
 
 FROM base as dev
