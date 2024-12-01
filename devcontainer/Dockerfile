@@ -58,7 +58,6 @@ RUN echo "export LANG='ja_JP.UTF-8'" >> /root/.bashrc
 RUN echo "alias vi='vim'" >> /root/.bashrc
 RUN echo "alias gb='git branch'" >> /root/.bashrc
 RUN echo "alias gst='git status'" >> /root/.bashrc
-RUN source /root/.bashrc
 
 FROM base as dev
 
