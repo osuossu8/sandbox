@@ -12,6 +12,8 @@ RUN apt-get update && apt-get upgrade -y && \
     build-essential \
     git \
     cmake \
+    unzip \
+    tmux \
     libgl1-mesa-dev \
     libopencv-dev \
     libjpeg-dev \
@@ -50,6 +52,9 @@ RUN poetry config virtualenvs.create false
 RUN pip install -U kaggle==1.5.16
 COPY /.kaggle/kaggle.json /root/.kaggle/kaggle.json
 RUN chmod 600 /root/.kaggle/kaggle.json
+
+COPY /.bashrc /root/.bashrc
+RUN source /root/.bashrc
 
 FROM base as dev
 
