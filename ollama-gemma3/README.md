@@ -3,7 +3,7 @@
 Ollama で Gemma3 をセルフホストして、画像解析を試すサンプル
 サンプル図面は [CADDi Tech Blog](https://caddi.tech/2024/12/06/080000) より入手
 
-## install ollama
+## Install Ollama
 
 ```sh
 apt install lshw 
@@ -11,11 +11,15 @@ apt install lshw
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
+## Run Docker Container
+
 ```sh
 docker build -t ollama-gemma .
 
 docker run -d --name ollama-container -p 8080:8080 -v ollama-models:/models ollama-gemma 
 ```
+
+## Call Gemma3
 
 ```sh
 curl -X POST http://localhost:8080/api/generate \
