@@ -1,0 +1,5 @@
+services:
+  kaggle_container:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # docker in docker
+    network_mode: "host" # to access host network from container when using docker in docker
