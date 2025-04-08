@@ -33,21 +33,33 @@ uv --directory migration run alembic revision --autogenerate -m "init"
 それ以降
 
 ```sh
-make refresh
-make migrate
-
+# terminal 1
 uv run uvicorn api.main:app --host 0.0.0.0 --port 1111 --reload
+
+# terminal 2
+# make refresh
+# make migrate
+make e2e
 ```
 
-```sh
-curl -X POST \
-    -H "Content-Type: application/json" \
-    -d @request_sample.json \
-    http://localhost:1111/tasks
+## Without trigger function for updated_at
+```
+$ make e2e
+curl -X POST -H "Content-Type: application/json" -d @request_sample.json http://localhost:1111/tasks/
+{"title":"sugoi_task","done":false}
 
 docker exec -it fastapi-psql-sqlalchemy-alembic-trigger-function-practice-sample_db-1 psql -U user -d sample_db -c "select * from tasks"
+ id |   title    | done |         created_at         |         updated_at         
+----+------------+------+----------------------------+----------------------------
+  1 | sugoi_task | f    | 2025-04-08 14:49:39.426614 | 2025-04-08 14:49:39.426614
+(1 row)
+
+curl -X POST -H "Content-Type: application/json" -d '{"title": "sugoi_task", "done": true}' http://localhost:1111/tasks/1
+{"title":"sugoi_task","done":true}
+
+docker exec -it fastapi-psql-sqlalchemy-alembic-trigger-function-practice-sample_db-1 psql -U user -d sample_db -c "select * from tasks"
+ id |   title    | done |         created_at         |         updated_at         
+----+------------+------+----------------------------+----------------------------
+  1 | sugoi_task | t    | 2025-04-08 14:49:39.426614 | 2025-04-08 14:49:39.426614
+(1 row)
 ```
-
-## TODO
-
-- db へのレコード追加と更新で updated_at の時刻が更新されるところまでスクリプトを書く

@@ -6,7 +6,7 @@ from api.task import Task
 
 class TaskRepositoryInterface(ABC):
     @abstractmethod
-    def get_task_by_id(self, user_id: int) -> Task | None:
+    def get_task_by_id(self, task_id: int) -> Task | None:
         pass
 
     @abstractmethod

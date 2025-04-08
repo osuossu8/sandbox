@@ -25,8 +25,8 @@ class TaskRepository(TaskRepositoryInterface):
         self.db.refresh(new_task)
         return Task.model_validate(new_task)
 
-    def update_task(self, task: Task) -> Task:
-        existing_task = self.db.query(TaskModel).filter(TaskModel.id == task.id).first()
+    def update_task(self, task: Task, task_id: int) -> Task:
+        existing_task = self.db.query(TaskModel).filter(TaskModel.id == task_id).first()
         if existing_task:
             for key, value in task.model_dump().items():
                 setattr(existing_task, key, value)
