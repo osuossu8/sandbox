@@ -87,3 +87,10 @@ docker exec -it fastapi-psql-sqlalchemy-alembic-trigger-function-practice-sample
   1 | sugoi_task | t    | 2025-04-08 15:00:51.288145 | 2025-04-08 15:00:53.540015
 (1 row)
 ```
+
+## References
+
+- [postgresql docs - trigger functions](https://www.postgresql.org/docs/current/plpgsql-trigger.html)
+- [sqlalchemy issue](https://github.com/sqlalchemy/sqlalchemy/issues/3444#issuecomment-441929501)
+- [stackoverflow](https://stackoverflow.com/questions/2362871/postgresql-current-timestamp-on-update)
+- https://www.morling.dev/blog/last-updated-columns-with-postgres/
