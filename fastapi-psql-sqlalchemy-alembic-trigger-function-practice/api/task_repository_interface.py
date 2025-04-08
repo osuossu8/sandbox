@@ -18,5 +18,5 @@ class TaskRepositoryInterface(ABC):
         pass
 
     @abstractmethod
-    def update_task(self, task: TaskModel) -> Task:
+    def update_task(self, task: TaskModel, task_id: int) -> Task:
         pass
