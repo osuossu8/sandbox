@@ -35,6 +35,17 @@ uv --directory migration run alembic revision --autogenerate -m "init"
 ```sh
 make refresh
 make migrate
+
+uv run uvicorn api.main:app --host 0.0.0.0 --port 1111 --reload
+```
+
+```sh
+curl -X POST \
+    -H "Content-Type: application/json" \
+    -d @request_sample.json \
+    http://localhost:1111/tasks
+
+docker exec -it fastapi-psql-sqlalchemy-alembic-trigger-function-practice-sample_db-1 psql -U user -d sample_db -c "select * from tasks"
 ```
 
 ## TODO
