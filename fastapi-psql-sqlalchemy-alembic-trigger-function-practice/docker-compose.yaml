@@ -1,0 +1,9 @@
+services:
+  sample_db:
+    image: postgres:15
+    ports:
+      - 6543:6543
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: sample_db

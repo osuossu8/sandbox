@@ -1,0 +1,62 @@
+[project]
+name = "fastapi-psql-sqlalchemy-alembic"
+version = "0.1.0"
+description = "fastapi psql sqlalchemy alembic sample code"
+readme = "README.md"
+requires-python = ">=3.11, <3.12"
+dependencies = [
+    "setuptools==75.8.0",
+    "fastapi[standard]>=0.115.6",
+    "pydantic>=2.10.4",
+    "uvicorn>=0.34.0",
+    "requests>=2.32.3",
+    "mypy>=1.14.1",
+    "loguru>=0.7.3",
+    "pytest-mock>=3.14.0",
+    "sqlalchemy>=2.0.37",
+    "psycopg2-binary>=2.9.10",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.4",
+  "pytest-asyncio>=0.25.1",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = [
+  "B008", # tmp
+  "E501", # Line too long (115 > 100)
+]
+
+[tool.ruff.lint.pylint]
+max-args = 6
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.mypy]
+ignore_missing_imports = true
+check_untyped_defs = true
+explicit_package_bases = true
