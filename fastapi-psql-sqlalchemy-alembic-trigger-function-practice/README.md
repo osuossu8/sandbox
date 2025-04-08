@@ -17,8 +17,24 @@ fastapi + postgresql + sqlalchemy + alembic の構成で trigger function を mi
 
 ## 手順
 
+初回のみ
+
 ```sh
 uv sync --all-groups
+
+# init command 
+# this should be run only once
+rm -rf migration
+mkdir -p migration
+uv --directory migration run alembic init alembic
+uv --directory migration run alembic revision --autogenerate -m "init"
+```
+
+それ以降
+
+```sh
+make refresh
+make migrate
 ```
 
 ## TODO

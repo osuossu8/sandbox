@@ -1,15 +1,18 @@
-import os
 from collections.abc import Generator
 from typing import Any
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-DB_USER = os.getenv("DB_USER", "user")
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "6543")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
-DB_NAME = os.getenv("DB_NAME", "sample_db")
+from .settings import DatabaseSettings
+
+database_settings = DatabaseSettings()
+
+DB_USER = database_settings.DB_USER
+DB_PASSWORD = database_settings.DB_PASSWORD
+DB_HOST = database_settings.DB_HOST
+DB_PORT = database_settings.DB_PORT
+DB_NAME = database_settings.DB_NAME
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 

@@ -1,7 +1,5 @@
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 
 
 def create_app() -> FastAPI:
