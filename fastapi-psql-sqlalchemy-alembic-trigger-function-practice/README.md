@@ -34,7 +34,7 @@ uv --directory migration run alembic revision --autogenerate -m "init"
 
 ```sh
 # terminal 1
-uv run uvicorn api.main:app --host 0.0.0.0 --port 1111 --reload
+make run_server
 
 # terminal 2
 # make refresh
