@@ -63,3 +63,27 @@ docker exec -it fastapi-psql-sqlalchemy-alembic-trigger-function-practice-sample
   1 | sugoi_task | t    | 2025-04-08 14:49:39.426614 | 2025-04-08 14:49:39.426614
 (1 row)
 ```
+
+## With trigger function for updated_at
+
+```
+curl -X POST -H "Content-Type: application/json" -d @request_sample.json http://localhost:1111/tasks/
+{"title":"sugoi_task","done":false}
+
+docker exec -it fastapi-psql-sqlalchemy-alembic-trigger-function-practice-sample_db-1 psql -U user -d sample_db -c "select * from tasks"
+ id |   title    | done |         created_at         |         updated_at         
+----+------------+------+----------------------------+----------------------------
+  1 | sugoi_task | f    | 2025-04-08 15:00:51.288145 | 2025-04-08 15:00:51.288145
+(1 row)
+
+
+
+curl -X POST -H "Content-Type: application/json" -d '{"title": "sugoi_task", "done": true}' http://localhost:1111/tasks/1
+{"title":"sugoi_task","done":true}
+
+docker exec -it fastapi-psql-sqlalchemy-alembic-trigger-function-practice-sample_db-1 psql -U user -d sample_db -c "select * from tasks"
+ id |   title    | done |         created_at         |         updated_at         
+----+------------+------+----------------------------+----------------------------
+  1 | sugoi_task | t    | 2025-04-08 15:00:51.288145 | 2025-04-08 15:00:53.540015
+(1 row)
+```
