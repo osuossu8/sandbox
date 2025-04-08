@@ -50,4 +50,4 @@ docker exec -it fastapi-psql-sqlalchemy-alembic-trigger-function-practice-sample
 
 ## TODO
 
-- os.getenv → pydantic-settings
+- db へのレコード追加と更新で updated_at の時刻が更新されるところまでスクリプトを書く
