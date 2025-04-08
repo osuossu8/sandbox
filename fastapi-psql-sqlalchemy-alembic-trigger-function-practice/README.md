@@ -94,3 +94,7 @@ docker exec -it fastapi-psql-sqlalchemy-alembic-trigger-function-practice-sample
 - [sqlalchemy issue](https://github.com/sqlalchemy/sqlalchemy/issues/3444#issuecomment-441929501)
 - [stackoverflow](https://stackoverflow.com/questions/2362871/postgresql-current-timestamp-on-update)
 - https://www.morling.dev/blog/last-updated-columns-with-postgres/
+
+## TODO
+
+- クリーンアーキテクチャライクな実装に修正する
