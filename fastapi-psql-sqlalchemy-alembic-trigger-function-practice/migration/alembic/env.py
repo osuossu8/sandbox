@@ -70,7 +70,6 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    print(database_settings.DB_USER)
     config.set_section_option("alembic", "DB_USER", database_settings.DB_USER)
     config.set_section_option("alembic", "DB_PASSWORD", database_settings.DB_PASSWORD)
     config.set_section_option("alembic", "DB_HOST", database_settings.DB_HOST)
