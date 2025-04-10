@@ -1,7 +1,11 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, String
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import Boolean
+from sqlalchemy import DateTime
+from sqlalchemy import String
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 from sqlalchemy.sql import func
 
 UTC_NOW = func.now()

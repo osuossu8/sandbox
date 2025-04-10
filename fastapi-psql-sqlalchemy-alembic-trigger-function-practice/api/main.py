@@ -1,5 +1,7 @@
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends
+from fastapi import FastAPI
+from fastapi import HTTPException
 
 from api.database import get_db_session
 from api.task import Task
