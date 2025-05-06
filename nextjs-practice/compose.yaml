@@ -1,0 +1,23 @@
+services:
+  nextjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3333:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run dev
+
+  db:
+    image: postgres:14-bookworm
+    ports:
+      - "5555:5432"
+    # volumes:
+    #   - db_data:/var/lib/postgresql/data # 永続化しない
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nextjs_db
