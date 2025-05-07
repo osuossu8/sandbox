@@ -5,7 +5,7 @@
       "../compose.yml"
     ],
   
-    "service": "nextjs-app",
+    "service": "nextjs-env",
   
     "workspaceFolder": "/app",
   
@@ -16,7 +16,6 @@
           "esbenp.prettier-vscode", // Prettier
           "bradlc.vscode-tailwindcss", // Tailwind CSS (使用している場合)
           "stylelint.vscode-stylelint" // Stylelint (使用している場合)
-          // その他、プロジェクトに必要な拡張機能を追加
         ]
       }
     }

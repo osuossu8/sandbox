@@ -1,6 +1,4 @@
 FROM node:18-bookworm-slim
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
+RUN apt-get update -y && apt-get install -y openssl
 EXPOSE 3333

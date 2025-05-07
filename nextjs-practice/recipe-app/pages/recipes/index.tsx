@@ -1,9 +1,28 @@
+// pages/recipes/index.tsx (抜粋)
 import Head from 'next/head';
 import Link from 'next/link';
+import { GetStaticProps } from 'next'; // getStaticProps の型
+import { prisma } from '../../lib/prisma'; // 作成した Prisma Client インスタンス
+// import { Recipe } from '@prisma/client'; // Prisma Client が生成する Recipe 型
+import { Recipe } from '../../generated/prisma';
 
-import { recipes, Recipe } from '../../data/recipes';
+// コンポーネントが受け取る props の型を定義
+interface RecipeListPageProps {
+  recipes: {
+    id: string;
+    slug: string;
+    title: string;
+    description: string | null;
+    ingredients: string[];
+    instructions: string[];
+    createdAt: string; // Serialized as string
+    updatedAt: string; // Serialized as string
+  }[]; // データベースから取得したレシピの配列
+}
 
-const RecipeListPage: React.FC = () => {
+// React コンポーネント
+const RecipeListPage: React.FC<RecipeListPageProps> = ({ recipes }) => {
+  // props で渡された recipes を使って表示
   return (
     <div>
       <Head>
@@ -12,40 +31,41 @@ const RecipeListPage: React.FC = () => {
 
       <main>
         <h1>レシピ一覧</h1>
-
         <ul>
-          {/* ここで map 処理 */}
-          {/* recipes 配列が undefined, null, 空でないか、各要素が期待通りの形式か確認 */}
-          {recipes && recipes.map((recipe: Recipe, index) => { // Type assertion を追加
-            // *** map のコールバック関数に渡されている recipe の中身も出力してみる ***
-            console.log('Mapping recipe:', recipe);
-
-            // recipe が undefined/null でないことを確認するガード節を一時的に追加するのも有効
-            if (!recipe) {
-              console.error('Undefined or null recipe found in array at index:', index);
-              return null; // undefined/null の要素はスキップする
-            }
-
-            // エラーが発生している箇所
-            return (
-              <li key={recipe.slug}> {/* key は重要です */}
-                {/* RecipeCard コンポーネントを使っている場合 */}
-                {/* <RecipeCard recipe={recipe} /> */}
-                {/* そうでない場合 */}
-                <h3>
-                  <Link href={`/recipes/${recipe.slug}`}> {/* ここでエラー */}
-                    {recipe.title}
-                  </Link>
-                </h3>
-              </li>
-            );
-          })}
+          {recipes.map((recipe) => (
+            <li key={recipe.id}> {/* DBのIDをキーにするのが推奨 */}
+              <Link href={`/recipes/${recipe.slug}`}>
+                <h3>{recipe.title}</h3>
+              </Link>
+            </li>
+          ))}
         </ul>
+        <p><Link href="/recipes/new">新しいレシピを追加</Link></p> {/* 新規作成ページへのリンク */}
       </main>
-
-      {/* フッターなど */}
     </div>
   );
 };
 
 export default RecipeListPage;
+
+// サーバーサイドで実行されるデータ取得関数
+export const getStaticProps: GetStaticProps<RecipeListPageProps> = async () => {
+  const recipes = await prisma.recipe.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+
+  // *** ここで Date オブジェクトを文字列に変換する処理を追加 ***
+  const serializedRecipes = recipes.map(recipe => ({
+    ...recipe, // レシピの他のプロパティをコピー
+    createdAt: recipe.createdAt.toISOString(), // Date オブジェクトを文字列に変換
+    updatedAt: recipe.updatedAt.toISOString(), // Date オブジェクトを文字列に変換
+  }));
+
+  // 取得したデータを props としてコンポーネントに渡す
+  return {
+    props: {
+      recipes: serializedRecipes, // 変換済みのデータを渡す
+    },
+    revalidate: 60, // オプション: 60秒ごとに再生成を試みる (ISR)
+  };
+};

@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Recipe {
+  id          String    @id @default(uuid()) // 各レシピを識別するユニークなID (UUID)
+  slug        String    @unique // URLに使用するスラッグ (ユニークな文字列)
+  title       String
+  description String?   // 説明は省略可能とする場合は String?
+  ingredients String[]  // 材料のリスト (PostgreSQLの配列型を使用)
+  instructions String[] // 作り方のリスト (PostgreSQLの配列型を使用)
+  createdAt   DateTime  @default(now()) // 作成日時
+  updatedAt   DateTime  @updatedAt      // 更新日時
+}

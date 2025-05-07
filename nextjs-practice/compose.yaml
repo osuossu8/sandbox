@@ -1,5 +1,5 @@
 services:
-  nextjs-app:
+  nextjs-env:
     build:
       context: .
       dockerfile: Dockerfile
@@ -7,9 +7,8 @@ services:
       - "3333:3000"
     volumes:
       - .:/app
-      - /app/node_modules
     working_dir: /app
-    command: npm run dev
+    command: sleep infinity
 
   db:
     image: postgres:14-bookworm
