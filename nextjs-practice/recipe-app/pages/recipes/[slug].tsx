@@ -1,18 +1,30 @@
-// pages/recipes/[slug].tsx (抜粋)
 import { GetStaticPaths, GetStaticProps } from 'next'; // getStaticPaths, getStaticProps の型
 import Head from 'next/head';
 import Link from 'next/link';
 import { prisma } from '../../lib/prisma'; // Prisma Client
-// import { Recipe } from '@prisma/client'; // Prisma Recipe 型
 import { Recipe } from '../../generated/prisma';
+import { useState } from 'react'; // useState をインポート
+
+interface SerializedRecipe {
+  slug: string;
+  title: string;
+  description: string | null;
+  ingredients: string[]; // 文字列の配列
+  instructions: string[]; // 文字列の配列
+  createdAt: string; // ISO 8601 形式の文字列
+  updatedAt: string; // ISO 8601 形式の文字列
+}
 
 // コンポーネントが受け取る props の型を定義
 interface RecipeDetailPageProps {
-  recipe: Recipe | null; // レシピデータ または null (見つからなかった場合)
+  // recipe: Recipe | null | SerializedRecipe; // レシピデータ または null (見つからなかった場合)
+  recipe: SerializedRecipe | null; // レシピデータ または null (見つからなかった場合)
 }
 
 // React コンポーネント
 const RecipeDetailPage: React.FC<RecipeDetailPageProps> = ({ recipe }) => {
+  const [copyStatus, setCopyStatus] = useState<string | null>(null); // コピーステータスメッセージ用のstate
+
   if (!recipe) {
     // レシピが見つからなかった場合の表示（getStaticPropsで見つからなかった場合）
     return (
@@ -24,12 +36,68 @@ const RecipeDetailPage: React.FC<RecipeDetailPageProps> = ({ recipe }) => {
     );
   }
 
+  // クリップボードにコピーするテキストを生成する関数
+  const generateRecipeText = (recipe: RecipeDetailPageProps['recipe']): string => {
+    if (!recipe) return ''; // レシピがない場合は空文字列を返す
+
+    let text = `レシピ: ${recipe.title}\n\n`;
+    if (recipe.description) {
+        text += `説明:\n${recipe.description}\n\n`;
+    }
+    if (recipe.ingredients && recipe.ingredients.length > 0) {
+        text += `材料:\n${recipe.ingredients.map(item => `- ${item}`).join('\n')}\n\n`;
+    }
+    if (recipe.instructions && recipe.instructions.length > 0) {
+        text += `作り方:\n${recipe.instructions.map((item, index) => `${index + 1}. ${item}`).join('\n')}\n`;
+    }
+
+    return text;
+  };
+
+  // クリップボードにコピーを実行する非同期関数
+  const handleCopyToClipboard = async () => {
+    const recipeText = generateRecipeText(recipe);
+
+    if (!recipeText) {
+        setCopyStatus('コピーする内容がありません。');
+        return;
+    }
+
+    // Clipboard API がサポートされているか確認
+    if (!navigator.clipboard) {
+        setCopyStatus('お使いのブラウザではクリップボードコピーがサポートされていません。');
+        return;
+    }
+
+    try {
+        await navigator.clipboard.writeText(recipeText);
+        setCopyStatus('レシピをクリップボードにコピーしました！');
+        // 3秒後にメッセージを消す
+        setTimeout(() => {
+            setCopyStatus(null);
+        }, 3000);
+    } catch (err) {
+        console.error('Failed to copy recipe:', err);
+        setCopyStatus('レシピのコピーに失敗しました。');
+        // 3秒後にメッセージを消す
+         setTimeout(() => {
+            setCopyStatus(null);
+        }, 3000);
+    }
+  };
+
   // レシピが見つかった場合の表示
   return (
     <div>
       <Head><title>{recipe.title}</title></Head>
       <main>
         <h1>{recipe.title}</h1>
+
+        {/* コピーボタン */}
+        <button onClick={handleCopyToClipboard}>レシピをコピー</button>
+        {/* コピーステータスメッセージ */}
+        {copyStatus && <p style={{ color: copyStatus.includes('成功') ? 'green' : 'red' }}>{copyStatus}</p>}
+
         <p>{recipe.description}</p>
         {/* 材料と作り方の表示 (index.tsx と同様に map でリスト表示) */}
          <h2>材料</h2>

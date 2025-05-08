@@ -1,10 +1,9 @@
-// pages/recipes/index.tsx (抜粋)
 import Head from 'next/head';
 import Link from 'next/link';
 import { GetStaticProps } from 'next'; // getStaticProps の型
 import { prisma } from '../../lib/prisma'; // 作成した Prisma Client インスタンス
 // import { Recipe } from '@prisma/client'; // Prisma Client が生成する Recipe 型
-import { Recipe } from '../../generated/prisma';
+// import { Recipe } from '../../generated/prisma';
 
 // コンポーネントが受け取る props の型を定義
 interface RecipeListPageProps {
