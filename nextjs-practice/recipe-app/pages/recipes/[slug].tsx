@@ -2,7 +2,6 @@ import { GetStaticPaths, GetStaticProps } from 'next'; // getStaticPaths, getSta
 import Head from 'next/head';
 import Link from 'next/link';
 import { prisma } from '../../lib/prisma'; // Prisma Client
-import { Recipe } from '../../generated/prisma';
 import { useState } from 'react'; // useState をインポート
 
 interface SerializedRecipe {
@@ -17,7 +16,6 @@ interface SerializedRecipe {
 
 // コンポーネントが受け取る props の型を定義
 interface RecipeDetailPageProps {
-  // recipe: Recipe | null | SerializedRecipe; // レシピデータ または null (見つからなかった場合)
   recipe: SerializedRecipe | null; // レシピデータ または null (見つからなかった場合)
 }
 
