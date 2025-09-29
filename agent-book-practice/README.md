@@ -8,4 +8,6 @@ https://github.com/GenerativeAgents/agent-book をベースに AI Agent の学�
 pyenv local 3.12
 
 uv sync --all-groups
+
+uv run python main.py
 ```
